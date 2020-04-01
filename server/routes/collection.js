@@ -29,7 +29,7 @@ router.post("/getCollections", auth, (req, res) => {
         )
 });
 
-router.post("/getAllCollections", auth, (req, res) => {
+router.post("/getAllCollections", (req, res) => {
     Collection.find()
         .exec((err, collections) => {
             if (err) return res.status(400).json({ success: false, err })
