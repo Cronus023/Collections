@@ -11,7 +11,7 @@ export class CommentPage extends Component {
         chatMessage: "",
     }
     componentDidMount() {
-        let server = "http://localhost:5000";
+        let server = "https://collections-items.herokuapp.com";
         this.socket = io(server);
         this.props.dispatch(getComments(this.props.match.params.itemId));
         this.socket.on("Output Chat Message", messageFromBackEnd => {
