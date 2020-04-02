@@ -34,8 +34,8 @@ router.post("/block_by_id", (req, res) => {
             User.find()
                 .exec((err, users) => {
                     if (err) return res.status(400).json({ success: false, err })
-                res.status(200).json({ success: true, users })
-            })
+                    res.status(200).json({ success: true, users })
+                })
         })
 });
 router.post("/delete_by_id", (req, res) => {
@@ -43,7 +43,7 @@ router.post("/delete_by_id", (req, res) => {
     Like.deleteMany({ userOfLike: id }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
     });
-    Field.deleteMany({ user: id}, function (err, result) {
+    Field.deleteMany({ user: id }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
     });
     Item.deleteMany({ user: id }, function (err, result) {
@@ -61,8 +61,8 @@ router.post("/delete_by_id", (req, res) => {
             User.find()
                 .exec((err, users) => {
                     if (err) return res.status(400).json({ success: false, err })
-                res.status(200).json({ success: true, users })
-            })
+                    res.status(200).json({ success: true, users })
+                })
         })
 });
 router.post("/admin_by_id", (req, res) => {
@@ -72,14 +72,14 @@ router.post("/admin_by_id", (req, res) => {
             User.find()
                 .exec((err, users) => {
                     if (err) return res.status(400).json({ success: false, err })
-                res.status(200).json({ success: true, users })
-            })
+                    res.status(200).json({ success: true, users })
+                })
         })
 });
 router.post("/register", (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
-        if(user){
-            return res.status(400).json({success: false})
+        if (user) {
+            return res.status(400).json({ success: false })
         }
         else {
             const user = new User(req.body);
@@ -91,11 +91,10 @@ router.post("/register", (req, res) => {
             });
         }
     });
-   
+
 });
 
 router.post("/login", (req, res) => {
-    console.log(req.body.email)
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!user)
             return res.json({
@@ -107,10 +106,23 @@ router.post("/login", (req, res) => {
                 loginSuccess: false,
                 message: "You are blocked, sorry("
             });
-        user.comparePassword(req.body.password, (err, isMatch) => {
-            if (!isMatch)
-                return res.json({ loginSuccess: false, message: "Wrong password" });
-
+        if (user.role != 2) {
+            user.comparePassword(req.body.password, (err, isMatch) => {
+                if (!isMatch)
+                    return res.json({ loginSuccess: false, message: "Wrong password" });
+                user.generateToken((err, user) => {
+                    if (err) return res.status(400).send(err);
+                    res.cookie("w_authExp", user.tokenExp);
+                    res
+                        .cookie("w_auth", user.token)
+                        .status(200)
+                        .json({
+                            loginSuccess: true, userId: user._id
+                        });
+                });
+            });
+        }
+        else {
             user.generateToken((err, user) => {
                 if (err) return res.status(400).send(err);
                 res.cookie("w_authExp", user.tokenExp);
@@ -121,7 +133,7 @@ router.post("/login", (req, res) => {
                         loginSuccess: true, userId: user._id
                     });
             });
-        });
+        }
     });
 });
 
