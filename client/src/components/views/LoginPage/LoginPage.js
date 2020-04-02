@@ -28,7 +28,7 @@ function LoginPage(props) {
       setisLoggedIn(true)
 
       let dataToSubmit = {
-        role:2,
+        SocialNetworks:true,
         email: response.userID,
         name: response.name,
         image: response.picture.data.url

@@ -106,7 +106,7 @@ router.post("/login", (req, res) => {
                 loginSuccess: false,
                 message: "You are blocked, sorry("
             });
-        if (user.role != 2) {
+        if (!user.SocialNetworks) {
             user.comparePassword(req.body.password, (err, isMatch) => {
                 if (!isMatch)
                     return res.json({ loginSuccess: false, message: "Wrong password" });

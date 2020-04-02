@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
         type:Boolean,
         default: false
     },
+    SocialNetworks:{
+        type:Boolean,
+        default: false
+    },
     image: String,
     token : {
         type: String,
