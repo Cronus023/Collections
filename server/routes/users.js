@@ -95,18 +95,55 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (!user)
-            return res.json({
-                loginSuccess: false,
-                message: "Auth failed, check out your Account or Password again"
-            });
-        if (user.isBlocked)
-            return res.json({
-                loginSuccess: false,
-                message: "You are blocked, sorry("
-            });
-        if (!user.SocialNetworks) {
+    if (req.body.SocialNetworks) {
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if (!user) {
+                const newuser = new User(req.body);
+                newuser.save((err, doc) => {
+                    if (err) return res.json({ success: false, err })
+                    doc.generateToken((err, new1) => {
+                        if (err) return res.status(400).send(err);
+                        res.cookie("w_authExp", new1.tokenExp);
+                        res
+                            .cookie("w_auth", new1.token)
+                            .status(200)
+                            .json({
+                                loginSuccess: true, userId: new1._id
+                            })
+                    })
+                });
+            }
+            else {
+                if (user.isBlocked)
+                    return res.json({
+                        loginSuccess: false,
+                        message: "You are blocked, sorry("
+                    });
+                user.generateToken((err, user) => {
+                    if (err) return res.status(400).send(err);
+                    res.cookie("w_authExp", user.tokenExp);
+                    res
+                        .cookie("w_auth", user.token)
+                        .status(200)
+                        .json({
+                            loginSuccess: true, userId: user._id
+                        });
+                });
+            }
+        })
+    }
+    else {
+        User.findOne({ email: req.body.email }, (err, user) => {
+            if (!user)
+                return res.json({
+                    loginSuccess: false,
+                    message: "Auth failed, check out your Account or Password again"
+                });
+            if (user.isBlocked)
+                return res.json({
+                    loginSuccess: false,
+                    message: "You are blocked, sorry("
+                });
             user.comparePassword(req.body.password, (err, isMatch) => {
                 if (!isMatch)
                     return res.json({ loginSuccess: false, message: "Wrong password" });
@@ -121,21 +158,9 @@ router.post("/login", (req, res) => {
                         });
                 });
             });
-        }
-        else {
-            user.generateToken((err, user) => {
-                if (err) return res.status(400).send(err);
-                res.cookie("w_authExp", user.tokenExp);
-                res
-                    .cookie("w_auth", user.token)
-                    .status(200)
-                    .json({
-                        loginSuccess: true, userId: user._id
-                    });
-            });
-        }
-    });
-});
+        })
+    }
+})
 
 router.get("/logout", auth, (req, res) => {
     User.findOneAndUpdate({ _id: req.user._id }, { token: "", tokenExp: "" }, (err, doc) => {

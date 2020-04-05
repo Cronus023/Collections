@@ -3,45 +3,26 @@ import { withRouter } from "react-router-dom"
 import { loginUser } from "../../../_actions/user_actions"
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { Form, Icon, Input, Button, Checkbox, Typography } from 'antd';
-import Axios from 'axios'
-import { registerUser } from "../../../_actions/user_actions";
+import { Form, Icon, Input, Button, Typography, Tooltip } from 'antd';
 import { useDispatch } from "react-redux"
-import FacebookLogin from "react-facebook-login"
-import './Facebook/Facebook.css'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import GoogleLogin from 'react-google-login';
+import { FacebookOutlined,GoogleOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 function LoginPage(props) {
   const dispatch = useDispatch();
   const [formErrorMessage, setFormErrorMessage] = useState('')
-  //facebook
-  const [isLoggedIn, setisLoggedIn] = useState(false)
-  const [Name, setName] = useState("")
-  const [DataToSubmit, setdataToSubmit] = useState({})
-  const [Picture, setPicture] = useState("")
 
-
-  const responseFacebook = response => {
-    if (response.picture && response.name) {
-      setPicture(response.picture.data.url)
-      setName(response.name)
-      setisLoggedIn(true)
-
-      let dataToSubmit = {
-        SocialNetworks:true,
-        email: response.userID,
-        name: response.name,
-        image: response.picture.data.url
-      }
-      setdataToSubmit(dataToSubmit)
-      Axios.post(`/api/users/register`, dataToSubmit)
+  const responseGoogle = (response) => {
+    console.log(response.profileObj)
+    let dataToSubmit = {
+      SocialNetworks: true,
+      email: response.profileObj.googleId,
+      name: response.profileObj.name,
+      image: response.profileObj.imageUrl
     }
-  }
-  const componentClicked = () => console.log("clicked");
-
-  const onClick = () => {
-    setisLoggedIn(false)
-    dispatch(loginUser(DataToSubmit))
+    dispatch(loginUser(dataToSubmit))
       .then(response => {
         if (response.payload.loginSuccess) {
           window.localStorage.setItem('userId', response.payload.userId);
@@ -51,7 +32,26 @@ function LoginPage(props) {
         }
       })
   }
-  
+
+  const responseFacebook = response => {
+    let dataToSubmit = {
+      SocialNetworks: true,
+      email: response.userID,
+      name: response.name,
+      image: response.picture.data.url
+    }
+    dispatch(loginUser(dataToSubmit))
+      .then(response => {
+        if (response.payload.loginSuccess) {
+          window.localStorage.setItem('userId', response.payload.userId);
+          props.history.push("/");
+        } else {
+          setFormErrorMessage(response.payload.message)
+        }
+      })
+  }
+
+
   return (
     <Formik
       initialValues={{
@@ -106,7 +106,7 @@ function LoginPage(props) {
         } = props;
         return <div className="app">
           <Title level={2}>Log In</Title>
-          {!isLoggedIn ? (<form onSubmit={handleSubmit} style={{ width: '350px' }}>
+          <form onSubmit={handleSubmit} style={{ width: '350px' }}>
 
             <Form.Item required>
               <Input
@@ -157,30 +157,32 @@ function LoginPage(props) {
               <div>
                 <FacebookLogin
                   appId="895250614235866"
-                  autoLoad={true}
                   fields="name,email,picture"
-                  cssClass="facebook"
-                  onClick={componentClicked}
+                  render={renderProps => (
+                    <Tooltip title="Facebook-login">
+                      <Button onClick={renderProps.onClick} style={{ width: "350px", background: "#191970", color: "#fff" ,height:"40px"}}><FacebookOutlined />Facebook</Button>
+                    </Tooltip>
+                  )}
                   callback={responseFacebook}
+                />
+              </div>
+              <div>
+                <GoogleLogin
+                  clientId="333437658523-d3qdis6m7rrf2oe0cpemkpekbiqiqokn.apps.googleusercontent.com"
+                  buttonText="Login"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  render={renderProps => (
+                    <Tooltip title="Google-login">
+                      <Button onClick={renderProps.onClick} style={{ width: "350px", color: "#32CD32",height:"40px" }}><GoogleOutlined />Google</Button>
+                    </Tooltip>
+                  )}
+                  cookiePolicy={'single_host_origin'}
                 />
               </div>
                 Or <a href="/register">register now!</a>
             </Form.Item>
-          </form>) :
-            <div
-              style={{
-                width: "400px",
-                margin: "auto",
-                background: "#f4f4f4",
-                padding: "20px"
-              }}
-            >
-              <img src={Picture} alt={Name} />
-              <h2>Welcome {Name}</h2>
-              <Button onClick={onClick} type="primary" htmlType="submit" className="login-form-button" style={{ minWidth: '100%' }} disabled={isSubmitting} onSubmit={handleSubmit}>
-                Log in
-            </Button>
-            </div>}
+          </form>
         </div>
       }}
     </Formik>
