@@ -29,7 +29,7 @@ router.post("/getUsers", (req, res) => {
 });
 router.post("/block_by_id", (req, res) => {
     User.updateOne({ _id: req.query.id }, { $set: { isBlocked: req.query.block, token: "", tokenExp: "" } })
-        .exec((err, u) => {
+        .exec((err) => {
             if (err) return res.status(400).json({ success: false, err })
             User.find()
                 .exec((err, users) => {
@@ -56,7 +56,7 @@ router.post("/delete_by_id", (req, res) => {
         if (err) return res.status(400).json({ success: false, err })
     });
     User.deleteOne({ _id: id })
-        .exec((err, u) => {
+        .exec((err) => {
             if (err) return res.status(400).json({ success: false, err })
             User.find()
                 .exec((err, users) => {
@@ -67,7 +67,7 @@ router.post("/delete_by_id", (req, res) => {
 });
 router.post("/admin_by_id", (req, res) => {
     User.updateOne({ _id: req.query.id }, { $set: { role: 1 } })
-        .exec((err, u) => {
+        .exec((err) => {
             if (err) return res.status(400).json({ success: false, err })
             User.find()
                 .exec((err, users) => {

@@ -57,9 +57,9 @@ router.delete("/collection_by_id", (req, res) => {
     Like.deleteMany({ collectionOfLike: collectionIds }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
     });
-    /*Comment.deleteMany({ collectionOfLike: collectionIds }, function (err, result) {
+    Comment.deleteMany({ collect: collectionIds }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
-    });*/
+    });
     Field.deleteMany({ col: collectionIds }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
     });

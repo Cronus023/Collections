@@ -12,7 +12,7 @@
     "backend": "nodemon server/index.js",
     "frontend": "npm run start --prefix client",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Andrey Klochko",
   "license": "ISC",
@@ -25,6 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongoose": "^5.4.20",
+    "mongoose-text-search": "0.0.2",
     "multer": "^1.4.2",
     "react-redux": "^5.0.7",
     "saslprep": "^1.0.3",

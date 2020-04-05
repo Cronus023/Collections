@@ -8,11 +8,22 @@ const { Comment } = require("../models/Comment");
 const { auth } = require("../middleware/auth");
 
 router.post("/latestitems", (req, res) => {
-    Item.find()
-        .exec((err, items) => {
-            if (err) return res.status(400).json({ success: false, err })
-            res.status(200).json({ success: true, items })
+    let term = req.body.searchTerm;
+    if (term) {
+      Item
+      .find({ $text: { $search: term } })
+      .exec((err, items) => {
+          if (err) return res.status(400).json({ success: false, err })
+          res.status(200).json({ success: true, items })
+      })
+    }
+    else{
+        Item.find()
+            .exec((err, items) => {
+                if (err) return res.status(400).json({ success: false, err })
+                res.status(200).json({ success: true, items })
         })
+    }
 });
 
 router.post("/item_by_id", auth, (req, res) => {

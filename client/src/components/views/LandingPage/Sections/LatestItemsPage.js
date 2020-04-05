@@ -4,13 +4,19 @@ import { Icon, Col, Card, Row } from 'antd';
 import moment from 'moment';
 import Likes from '../../../utils/Likes'
 import FieldsOfItem from '../../../utils/FieldsOfItem';
+import SearchFeature from './Search';
+
 import Comments from './Comments';
 const { Meta } = Card;
 
 function LatestItems(props) {
     const [Items, setItems] = useState([])
-    useEffect(() => {
-        Axios.post("/api/items/latestitems")
+    const [SearchTerms, setSearchTerms] = useState("")
+    useEffect(()=>{
+       getItems()
+    },[])
+    const getItems = (variables) => {
+        Axios.post("/api/items/latestitems",variables)
             .then(response => {
                 if (response.data.success) {
                     setItems(response.data.items.reverse())
@@ -18,16 +24,17 @@ function LatestItems(props) {
                     alert('Failed to fectch product datas')
                 }
             })
-    }, [])
+    }
+
     const renderCards = Items.map((item, index) => {
-        let moment1 =  moment(item.createdAt)
+        let moment1 = moment(item.createdAt)
         while (index < 10) {
             return <Col lg={24} md={8} xs={24}>
                 <Card
                     onClick={console.log("Lol")}
                     actions={[
                         <Likes id={item._id} />,
-                        <Comments id={item._id}/>
+                        <Comments id={item._id} />
                     ]}
                     size="small"
                     hoverable={true}
@@ -39,10 +46,23 @@ function LatestItems(props) {
         }
     })
 
+    const updateSearchTerms = (newSearchTerm) => {
+        const variables = {
+            searchTerm: newSearchTerm
+        }
+        setSearchTerms(newSearchTerm)
+        getItems(variables)
+    }
+
     return (
         <div style={{ maxWidth: '800px', margin: '2rem auto' }}>
             <div style={{ textAlign: 'center' }}>
                 <h2>Latest 10 items <Icon type="smile" /></h2>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
+                <SearchFeature
+                    refreshFunction={updateSearchTerms}
+                />
             </div>
             {Items.length === 0 ?
                 <div style={{ display: 'flex', height: '300px', justifyContent: 'center', alignItems: 'center' }}>

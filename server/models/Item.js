@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 const ItemSchema = mongoose.Schema({
@@ -17,6 +18,9 @@ const ItemSchema = mongoose.Schema({
         default:[]
     },
 },{timestamps:true})
+
+ItemSchema.index({'$**': "text"});
+
 const Item = mongoose.model('Item', ItemSchema);
 
 module.exports = { Item }
