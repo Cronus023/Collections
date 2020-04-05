@@ -16,7 +16,6 @@ const ItemSchema = mongoose.Schema({
         type:Array,
         default:[]
     },
-    comments: {type:String,},
 },{timestamps:true})
 const Item = mongoose.model('Item', ItemSchema);
 

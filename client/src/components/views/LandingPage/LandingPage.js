@@ -3,15 +3,13 @@ import { Menu } from 'antd'
 import TopCollections from './Sections/Top3CollectionPage'
 import LatestItems from './Sections/LatestItemsPage'
 import Users from './Sections/Users'
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+import "./Sections/CssUtils/main.css"
 function LandingPage(props) {
     console.log(window.localStorage.getItem('userId'))
     const[click,setClick] = useState(false)
     const[clickOnAdmin,setClickOnAdmin] = useState(false)
     let isAdmin = false
-    if(props.user.userData)
-        isAdmin=props.user.userData.isAdmin
+    if(props.user.userData) isAdmin=props.user.userData.isAdmin
     const onClick = () => {
         setClickOnAdmin(false)
         setClick(true)

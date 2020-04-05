@@ -4,6 +4,8 @@ const { Collection } = require("../models/Collection");
 const { Field } = require("../models/Field");
 const { Item } = require("../models/Item");
 const { Like } = require("../models/Like");
+const { Comment } = require("../models/Comment");
+
 const { auth } = require("../middleware/auth");
 
 router.post("/uploadCollection", auth, (req, res) => {
@@ -39,8 +41,7 @@ router.post("/getAllCollections", (req, res) => {
 
 
 router.get("/collection_by_id", (req, res) => {
-    let collectionIds = req.query.id
-    Collection.find({ '_id': { $in: collectionIds } })
+    Collection.find({ '_id': { $in: req.query.id } })
         .populate('writer')
         .exec((err, collection) => {
             if (err) return req.status(400).send(err)
@@ -56,6 +57,9 @@ router.delete("/collection_by_id", (req, res) => {
     Like.deleteMany({ collectionOfLike: collectionIds }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
     });
+    /*Comment.deleteMany({ collectionOfLike: collectionIds }, function (err, result) {
+        if (err) return res.status(400).json({ success: false, err })
+    });*/
     Field.deleteMany({ col: collectionIds }, function (err, result) {
         if (err) return res.status(400).json({ success: false, err })
     });

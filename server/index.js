@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const cors = require('cors')
 const { Comment } = require("./models/Comment");
+const { Item } = require("./models/Item");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
@@ -12,20 +13,24 @@ io.on("connection", socket => {
   socket.on("Input Chat Message", msg => {
     connect.then(db => {
       try {
-          let comment = new Comment({ message: msg.chatMessage, sender:msg.userId, item:msg.itemId})
-          comment.save((err, doc) => {
-            if(err) return res.json({ success: false, err })
-            Comment.find({ "_id": doc._id })
-            .populate("sender")
-            .exec((err, doc)=> {
-                return io.emit("Output Chat Message", doc);
+        Item.find({ '_id': { $in: msg.itemId } })
+          .exec((err, ite) => {
+            if (err) return req.status(400).send(err)
+            let comment = new Comment({ message: msg.chatMessage, sender: msg.userId, item: msg.itemId, collect: ite[0].collect })
+            comment.save((err, doc) => {
+              if (err) return res.json({ success: false, err })
+              Comment.find({ "_id": doc._id })
+                .populate("sender")
+                .exec((err, doc) => {
+                  return io.emit("Output Chat Message", doc);
+                })
             })
           })
       } catch (error) {
         console.error(error);
       }
     })
-   })
+  })
 
 })
 const config = require("./config/key");

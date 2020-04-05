@@ -47,7 +47,6 @@ function ProductInfo(props) {
         }
         Axios.post(`/api/collections/collection_by_id?id=${Collection._id}`, Newfield)
             .then(response => {
-                console.log(response.data.success)
                 if (response.data.success) {
                     alert('Field add')
                 }
@@ -57,9 +56,7 @@ function ProductInfo(props) {
             })
         setClick(false)
     }
-    const onSetClick = () =>{
-        setClick(true)
-    }
+    const onSetClick = () => setClick(!Click)
     return (
         <div>
             <Descriptions column={2} >

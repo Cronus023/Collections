@@ -12,6 +12,10 @@ const CommentSchema = mongoose.Schema({
     item:{
         type:Schema.Types.ObjectId,
         ref:'Item'
+    },
+    collect:{
+        type:Schema.Types.ObjectId,
+        ref:'Collection'
     }
 },{timestamps:true})
 const Comment = mongoose.model('Comment', CommentSchema);

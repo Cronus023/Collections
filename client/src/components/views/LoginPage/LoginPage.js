@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux"
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import GoogleLogin from 'react-google-login';
 import { FacebookOutlined,GoogleOutlined } from '@ant-design/icons';
+import "./login.css"
 const { Title } = Typography;
 
 function LoginPage(props) {
@@ -53,6 +54,7 @@ function LoginPage(props) {
 
 
   return (
+  <div className="login-page">
     <Formik
       initialValues={{
         email: '',
@@ -105,7 +107,7 @@ function LoginPage(props) {
           handleReset,
         } = props;
         return <div className="app">
-          <Title level={2}>Log In</Title>
+          <Title level={2}>Authorization </Title>
           <form onSubmit={handleSubmit} style={{ width: '350px' }}>
 
             <Form.Item required>
@@ -160,7 +162,7 @@ function LoginPage(props) {
                   fields="name,email,picture"
                   render={renderProps => (
                     <Tooltip title="Facebook-login">
-                      <Button onClick={renderProps.onClick} style={{ width: "350px", background: "#191970", color: "#fff" ,height:"40px"}}><FacebookOutlined />Facebook</Button>
+                      <Button onClick={renderProps.onClick} style={{ width: "350px", background: "#191970", color: "#fff" ,height:"35px"}}><FacebookOutlined />Facebook</Button>
                     </Tooltip>
                   )}
                   callback={responseFacebook}
@@ -174,18 +176,19 @@ function LoginPage(props) {
                   onFailure={responseGoogle}
                   render={renderProps => (
                     <Tooltip title="Google-login">
-                      <Button onClick={renderProps.onClick} style={{ width: "350px", color: "#32CD32",height:"40px" }}><GoogleOutlined />Google</Button>
+                      <Button onClick={renderProps.onClick} style={{ width: "350px" , color: "#32CD32",height:"35px" }}><GoogleOutlined />Google</Button>
                     </Tooltip>
                   )}
                   cookiePolicy={'single_host_origin'}
                 />
               </div>
-                Or <a href="/register">register now!</a>
+                Or <a style={{color:"red"}} href="/register">register now!</a>
             </Form.Item>
           </form>
         </div>
       }}
     </Formik>
+    </div>
   );
 };
 

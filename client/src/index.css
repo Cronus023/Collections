@@ -7,15 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.light-mode{
-  background-color: #fff;
-  color:#333
-}
-.dark-mode{
-  background-color: rgb(3, 3, 3);
-  color:#fff
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

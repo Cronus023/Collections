@@ -15,6 +15,7 @@ export class CommentPage extends Component {
         this.socket = io(server);
         this.props.dispatch(getComments(this.props.match.params.itemId));
         this.socket.on("Output Chat Message", messageFromBackEnd => {
+            console.log(messageFromBackEnd)
             this.props.dispatch(afterPostMessage(messageFromBackEnd));
         })
     }
@@ -33,6 +34,7 @@ export class CommentPage extends Component {
         let userId = this.props.user.userData._id
         let userName = this.props.user.userData.name
         let itemId = this.props.match.params.itemId
+        let col = "pop"
         let nowTime = moment();
 
         this.socket.emit("Input Chat Message", {
@@ -40,7 +42,8 @@ export class CommentPage extends Component {
             userId,
             userName,
             nowTime,
-            itemId
+            itemId,
+            col
         });
         this.setState({ chatMessage: "" })
     }

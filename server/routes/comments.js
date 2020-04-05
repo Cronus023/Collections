@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { Comment } = require("../models/Comment");
 
-const { auth } = require("../middleware/auth");
 router.get("/getComments", (req, res) => {
     Comment.find({item:req.query.id})
         .populate("sender")

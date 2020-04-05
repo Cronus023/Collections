@@ -12,7 +12,6 @@ function DetailCollection(props) {
               setCollection(response.data.collection[0])
             })
     }, [])
-    console.log(Collection)
     return (
         <div className="postPage" style={{ width: '100%', padding: '3rem 4rem' }}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
