@@ -25,7 +25,13 @@ router.post("/latestitems", (req, res) => {
         })
     }
 });
-
+router.post("/item_by_collectionId", (req, res) => {
+        Item.find({ collect: req.query.collectionId })
+        .exec((err, item) => {
+            if (err) return res.status(400).json({ success: false, err })
+            res.status(200).json({ success: true, item})
+        })
+});
 router.post("/item_by_id", auth, (req, res) => {
     Item.find({ _id: req.query.id })
         .exec((err, item) => {

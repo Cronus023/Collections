@@ -13,7 +13,7 @@ import NewItemPage from './views/NewItemPage/NewItemPage';
 import MyItemsPage from './views/MyItemsPage/MyItemsPage';
 import UpdateItemPage from './views/UpdateItemPage/UpdateItemPage';
 import CommentPage from './views/CommentPage/CommentPage';
-
+import Detail from './views/Top3DetailPage/Top3DetailPage';
 function App() {
   return (
     <Suspense fallback={(<div>Loading...</div>)}>
@@ -23,6 +23,7 @@ function App() {
           <Route exact path="/" component={Auth(LandingPage, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
+          <Route exact path="/top3/:collectionId" component={Auth(Detail, null)} />
           <Route exact path="/collections/upload/:userId" component={Auth(UploadPage, true)} />
           <Route exact path="/collections/get/:userId" component={Auth(MyCollectionsPage, null)} />
           <Route exact path="/collections/:collectionId" component={Auth(DetailCollectionPage, null)} />

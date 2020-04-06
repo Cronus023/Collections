@@ -32,7 +32,6 @@ const NewItemPage = (props) => {
     const newFields = (newF) => {
         setfields(newF)
     }
-    console.log(Writer)
     const types = []
     const names1 = []
     const getFields = () => {

@@ -10,6 +10,10 @@ const LikeSchema = mongoose.Schema({
         type:Schema.Types.ObjectId,
         ref:'User'
     },
+    collectionOfLike:{
+        type:Schema.Types.ObjectId,
+        ref:'Collection'
+    }
 })
 const Like = mongoose.model('Like', LikeSchema);
 

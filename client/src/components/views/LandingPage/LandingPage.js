@@ -3,9 +3,8 @@ import { Menu } from 'antd'
 import TopCollections from './Sections/Top3CollectionPage'
 import LatestItems from './Sections/LatestItemsPage'
 import Users from './Sections/Users'
-import "./Sections/CssUtils/main.css"
+
 function LandingPage(props) {
-    console.log(window.localStorage.getItem('userId'))
     const[click,setClick] = useState(false)
     const[clickOnAdmin,setClickOnAdmin] = useState(false)
     let isAdmin = false

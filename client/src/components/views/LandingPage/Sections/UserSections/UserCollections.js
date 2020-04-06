@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button,Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import Axios from 'axios'
 import {DeleteFilled,CloseCircleFilled,InfoCircleFilled,PlusCircleFilled,ExclamationCircleOutlined} from '@ant-design/icons';
 function UserCollections(props) {

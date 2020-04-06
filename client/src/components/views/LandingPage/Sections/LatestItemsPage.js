@@ -6,7 +6,7 @@ import Likes from '../../../utils/Likes'
 import FieldsOfItem from '../../../utils/FieldsOfItem';
 import SearchFeature from './Search';
 
-import Comments from './Comments';
+import Comments from '../../../utils/Comments';
 const { Meta } = Card;
 
 function LatestItems(props) {
@@ -21,7 +21,7 @@ function LatestItems(props) {
                 if (response.data.success) {
                     setItems(response.data.items.reverse())
                 } else {
-                    alert('Failed to fectch product datas')
+                    alert('Failed to fectch item datas')
                 }
             })
     }
