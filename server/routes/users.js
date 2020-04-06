@@ -77,21 +77,13 @@ router.post("/admin_by_id", (req, res) => {
         })
 });
 router.post("/register", (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (user) {
-            return res.status(400).json({ success: false })
-        }
-        else {
-            const user = new User(req.body);
-            user.save((err, doc) => {
-                if (err) return res.json({ success: false, err });
-                return res.status(200).json({
-                    success: true
-                });
-            });
-        }
+    const user = new User(req.body);
+    user.save((err, doc) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).json({
+            success: true
+        });
     });
-
 });
 
 router.post("/login", (req, res) => {
